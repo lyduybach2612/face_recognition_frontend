@@ -80,6 +80,7 @@ export default function Recognition() {
         ref={webcamRef}
         style={{ marginBottom: "20px" }}
         screenshotFormat="image/png"
+        mirrored={true}
       />
       {error && (
         <Alert sx={{ marginBottom: "10px" }} severity="error">

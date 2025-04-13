@@ -104,6 +104,7 @@ export default function UserCreationForm() {
         ref={webcamRef}
         style={{ marginBottom: "20px" }}
         screenshotFormat="image/png"
+        mirrored={true}
       />
       <TextField
         fullWidth
