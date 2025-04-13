@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { uploadImage } from "../service/ImageService";
@@ -57,15 +57,16 @@ export default function Recognition() {
     }
   };
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "top",
         height: "100vh",
       }}
     >
+      <Box component="h1" style={{marginBottom: "40px"}}>Điểm Danh</Box>
       <Webcam
         ref={webcamRef}
         style={{ marginBottom: "20px" }}
@@ -85,6 +86,6 @@ export default function Recognition() {
       <Button variant="contained" onClick={handleCapture}>
         Capture
       </Button>
-    </div>
+    </Box>
   );
 }

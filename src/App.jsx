@@ -1,15 +1,19 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Recognition from "./page/Recognition";
 import UserCreation from "./page/UserCreation";
+import Layout from "./page/Layout";
 function App() {
   return (
-    <>
-      <Recognition />
-      {/* <UserCreation /> */}
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout/>}>
+          <Route path="" element={<Recognition />} />
+          <Route path="users/new" element={<UserCreation />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
