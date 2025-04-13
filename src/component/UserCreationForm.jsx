@@ -65,14 +65,14 @@ export default function UserCreationForm() {
             return;
           }
 
-          // const arcfaceResponse = await createArcfaceEmbedding(
-          //   image_id,
-          //   user_id
-          // );
-          // if (arcfaceResponse.detail.code != 200) {
-          //   setError(`Lỗi khi tạo Arcface embedding cho ảnh ${i + 1}`);
-          //   return;
-          // }
+          const arcfaceResponse = await createArcfaceEmbedding(
+            image_id,
+            user_id
+          );
+          if (arcfaceResponse.detail.code != 200) {
+            setError(`Lỗi khi tạo Arcface embedding cho ảnh ${i + 1}`);
+            return;
+          }
 
           setMessage(`Đã thêm ảnh ${i + 1}/5`);
         }

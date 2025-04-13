@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Alert, Box, Button } from "@mui/material";
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { uploadImage } from "../service/ImageService";
@@ -7,6 +7,8 @@ import { recognizeByArcface } from "../service/ArcFaceService";
 export default function Recognition() {
   const [arcfaceUser, setArcfaceUser] = useState({ user_id: "", name: "" });
   const [facenetUser, setFacenetUser] = useState({ user_id: "", name: "" });
+  const [facenetError, setFacenetError] = useState("");
+  const [arcfaceError, setArcfaceError] = useState("");
   const [error, setError] = useState("");
   const webcamRef = useRef(null);
   const upload = async () => {
@@ -24,6 +26,11 @@ export default function Recognition() {
     }
   };
   const handleCapture = async () => {
+    setArcfaceError("");
+    setFacenetError("");
+    setError("");
+    setArcfaceUser({ user_id: "", name: "" });
+    setFacenetUser({ user_id: "", name: "" });
     const id = await upload();
     if (id != -1) {
       const facenetResult = await recognizeByFacenet(id);
@@ -35,10 +42,10 @@ export default function Recognition() {
         });
         setError("");
       } else if (facenetResult.detail.code == 404) {
-        setError("Người dùng chưa có trong hệ thống");
+        setFacenetError("Người dùng chưa có trong hệ thống");
         setFacenetUser({ user_id: "", name: "" });
       } else if (facenetResult.detail.code == 400) {
-        setError("Không có khuôn mặt trong ảnh");
+        setFacenetError("Không có khuôn mặt trong ảnh");
         setFacenetUser({ user_id: "", name: "" });
       }
       if (arcfaceResult.detail.code == 200) {
@@ -48,10 +55,10 @@ export default function Recognition() {
         });
         setError("");
       } else if (arcfaceResult.detail.code == 404) {
-        setError("Người dùng chưa có trong hệ thống");
+        setArcfaceError("Người dùng chưa có trong hệ thống");
         setArcfaceUser({ user_id: "", name: "" });
       } else if (arcfaceResult.detail.code == 400) {
-        setError("Không có khuôn mặt trong ảnh");
+        setArcfaceError("Không có khuôn mặt trong ảnh");
         setArcfaceUser({ user_id: "", name: "" });
       }
     }
@@ -66,22 +73,38 @@ export default function Recognition() {
         height: "100vh",
       }}
     >
-      <Box component="h1" style={{marginBottom: "40px"}}>Điểm Danh</Box>
+      <Box component="h1" style={{ marginBottom: "40px" }}>
+        Điểm Danh
+      </Box>
       <Webcam
         ref={webcamRef}
         style={{ marginBottom: "20px" }}
         screenshotFormat="image/png"
       />
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && (
+        <Alert sx={{ marginBottom: "10px" }} severity="error">
+          {error}
+        </Alert>
+      )}
+      {arcfaceError && (
+        <Alert sx={{ marginBottom: "10px" }} severity="error">
+          Arcface: {arcfaceError}
+        </Alert>
+      )}
+      {facenetError && (
+        <Alert sx={{ marginBottom: "10px" }} severity="error">
+          Facenet: {facenetError}
+        </Alert>
+      )}
       {facenetUser.user_id != "" && (
-        <div>
-          <p>Facenet: {facenetUser.name}</p>
-        </div>
+        <Alert sx={{ marginBottom: "10px" }} severity="success">
+          Facenet: {facenetUser.name}
+        </Alert>
       )}
       {arcfaceUser.user_id != "" && (
-        <div>
-          <p>Arcface: {arcfaceUser.name}</p>
-        </div>
+        <Alert sx={{ marginBottom: "10px" }} severity="success">
+          Arcface: {arcfaceUser.name}
+        </Alert>
       )}
       <Button variant="contained" onClick={handleCapture}>
         Capture
