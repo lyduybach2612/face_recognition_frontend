@@ -17,6 +17,9 @@ const Layout = () => {
             <Button color="inherit" component={Link} to="/">
               Điểm danh
             </Button>
+            <Button color="inherit" component={Link} to="/class">
+              Lớp
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>

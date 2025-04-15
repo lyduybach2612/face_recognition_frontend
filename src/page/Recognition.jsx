@@ -5,8 +5,8 @@ import { uploadImage } from "../service/ImageService";
 import { recognizeByFacenet } from "../service/FacenetService";
 import { recognizeByArcface } from "../service/ArcFaceService";
 export default function Recognition() {
-  const [arcfaceUser, setArcfaceUser] = useState({ user_id: "", name: "" });
-  const [facenetUser, setFacenetUser] = useState({ user_id: "", name: "" });
+  const [arcfaceUser, setArcfaceUser] = useState({ id: "", name: "" });
+  const [facenetUser, setFacenetUser] = useState({ id: "", name: "" });
   const [facenetError, setFacenetError] = useState("");
   const [arcfaceError, setArcfaceError] = useState("");
   const [error, setError] = useState("");
@@ -29,37 +29,37 @@ export default function Recognition() {
     setArcfaceError("");
     setFacenetError("");
     setError("");
-    setArcfaceUser({ user_id: "", name: "" });
-    setFacenetUser({ user_id: "", name: "" });
+    setArcfaceUser({ id: "", name: "" });
+    setFacenetUser({ id: "", name: "" });
     const id = await upload();
     if (id != -1) {
       const facenetResult = await recognizeByFacenet(id);
       const arcfaceResult = await recognizeByArcface(id);
       if (facenetResult.detail.code == 200) {
         setFacenetUser({
-          user_id: facenetResult.detail.data.id,
-          name: facenetResult.detail.data.username,
+          id: facenetResult.detail.data.id,
+          name: facenetResult.detail.data.name,
         });
         setError("");
       } else if (facenetResult.detail.code == 404) {
         setFacenetError("Người dùng chưa có trong hệ thống");
-        setFacenetUser({ user_id: "", name: "" });
+        setFacenetUser({ id: "", name: "" });
       } else if (facenetResult.detail.code == 400) {
         setFacenetError("Không có khuôn mặt trong ảnh");
-        setFacenetUser({ user_id: "", name: "" });
+        setFacenetUser({ id: "", name: "" });
       }
       if (arcfaceResult.detail.code == 200) {
         setArcfaceUser({
-          user_id: arcfaceResult.detail.data.id,
-          name: arcfaceResult.detail.data.username,
+          id: arcfaceResult.detail.data.id,
+          name: arcfaceResult.detail.data.name,
         });
         setError("");
       } else if (arcfaceResult.detail.code == 404) {
         setArcfaceError("Người dùng chưa có trong hệ thống");
-        setArcfaceUser({ user_id: "", name: "" });
+        setArcfaceUser({ id: "", name: "" });
       } else if (arcfaceResult.detail.code == 400) {
         setArcfaceError("Không có khuôn mặt trong ảnh");
-        setArcfaceUser({ user_id: "", name: "" });
+        setArcfaceUser({ id: "", name: "" });
       }
     }
   };
@@ -97,12 +97,12 @@ export default function Recognition() {
           Facenet: {facenetError}
         </Alert>
       )}
-      {facenetUser.user_id != "" && (
+      {facenetUser.id != "" && (
         <Alert sx={{ marginBottom: "10px" }} severity="success">
           Facenet: {facenetUser.name}
         </Alert>
       )}
-      {arcfaceUser.user_id != "" && (
+      {arcfaceUser.id != "" && (
         <Alert sx={{ marginBottom: "10px" }} severity="success">
           Arcface: {arcfaceUser.name}
         </Alert>

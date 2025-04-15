@@ -15,6 +15,7 @@ const validateFacenetImage = async (image_id) => {
 
 const createFacenetEmbedding = async (image_id, user_id) => {
   const data = await validateFacenetImage(image_id);
+  console.log(data);
   if (data.detail.code == 200) {
     const response = await fetch(FACENET_EMBEDDING_URL, {
       method: "POST",
