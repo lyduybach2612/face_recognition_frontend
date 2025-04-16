@@ -60,8 +60,11 @@ export default function UserCreationForm() {
             image_id,
             user_id
           );
-          if (facenetResponse.detail.code != 200) {
-            setError(`Lỗi khi tạo Facenet embedding cho ảnh ${i + 1}`);
+          if (facenetResponse.detail.code == 400) {
+            setError(`Facenet: Người dùng đã có trong hệ thống`);
+            return;
+          }else if (facenetResponse.detail.code != 200){
+            setError(`Facenet: Lỗi trong quá trình thêm ảnh ${i+1}`);
             return;
           }
 
@@ -69,8 +72,11 @@ export default function UserCreationForm() {
             image_id,
             user_id
           );
-          if (arcfaceResponse.detail.code != 200) {
-            setError(`Lỗi khi tạo Arcface embedding cho ảnh ${i + 1}`);
+          if (arcfaceResponse.detail.code == 400) {
+            setError(`Arcface: Người dùng đã có trong hệ thống`);
+            return;
+          }else if (arcfaceResponse.detail.code != 200){
+            setError(`Arcface: Lỗi trong quá trình thêm ảnh ${i+1}`);
             return;
           }
 

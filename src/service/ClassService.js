@@ -4,6 +4,7 @@ const createClass = async (name) => {
   const body = { name: name };
   const response = await fetch(CLASS_URL, {
     method: "POST",
+    headers: { "Content-Type": "application/json"},
     body: JSON.stringify(body),
   });
   return response.json();
@@ -18,7 +19,8 @@ const updateClass = async (id, name) => {
   const body = { name: name };
   const response = await fetch(CLASS_URL + id, {
     method: "PUT",
-    body: body,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   });
   return response.json();
 };
@@ -30,4 +32,4 @@ const deleteClass = async (id) => {
   console.log(response);
 };
 
-export {deleteClass, updateClass, createClass, getAllClasses};
+export { deleteClass, updateClass, createClass, getAllClasses };

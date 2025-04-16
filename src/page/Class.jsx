@@ -16,14 +16,17 @@ import {
   createClass,
   deleteClass,
   getAllClasses,
+  updateClass,
 } from "../service/ClassService";
 
 export default function Class() {
   const [classes, setClasses] = useState([]);
+  const [selectedClassId, setSelectedClassId] = useState("");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [className, setClassName] = useState("");
+  const [updateOpen, setUpdateOpen] = useState(false);
   async function fetchData() {
     const response = await getAllClasses();
     setClasses(response);
@@ -56,6 +59,27 @@ export default function Class() {
     e.preventDefault();
     const response = await createClass(className);
     await fetchData();
+    setOpen(false);
+  };
+
+  const handleUpdateOpen = (id) => {
+    setUpdateOpen(true);
+    setSelectedClassId(id);
+  };
+  const handleUpdateClose = () => {
+    setUpdateOpen(false);
+    setSelectedClassId("");
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await updateClass(selectedClassId, className);
+      await fetchData();
+      setUpdateOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <Box>
@@ -112,7 +136,12 @@ export default function Class() {
                 <TableCell>{cls.id}</TableCell>
                 <TableCell>{cls.name}</TableCell>
                 <TableCell>
-                  <Button variant="contained" sx={{ marginRight: "20px" }}>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    sx={{ marginRight: "20px" }}
+                    onClick={() => handleUpdateOpen(cls.id)}
+                  >
                     Sửa
                   </Button>
                   <Button
@@ -126,6 +155,35 @@ export default function Class() {
               </TableRow>
             ))}
           </TableBody>
+          <Modal
+            open={updateOpen}
+            onClose={handleUpdateClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Sửa lớp
+              </Typography>
+
+              <Box onSubmit={(e) => handleUpdate(e)} component="form">
+                <TextField
+                  id="outlined-basic"
+                  label="Tên lớp"
+                  variant="outlined"
+                  onChange={(e) => setClassName(e.target.value)}
+                />
+                <Button
+                  variant="contained"
+                  sx={{ height: "56px", marginLeft: "1pc" }}
+                  color="primary"
+                  type="submit"
+                >
+                  Cập nhập
+                </Button>
+              </Box>
+            </Box>
+          </Modal>
         </Table>
       </TableContainer>
     </Box>
