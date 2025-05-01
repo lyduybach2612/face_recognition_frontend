@@ -38,13 +38,14 @@ export default function Recognition() {
       const facenetResult = await recognizeByFacenet(id);
       const arcfaceResult = await recognizeByArcface(id);
       if (facenetResult.detail.code == 200) {
-        setFacenetUser({
+        const userData = {
           id: facenetResult.detail.data.id,
           name: facenetResult.detail.data.name,
-        });
+        };
+        setFacenetUser(userData);
         setError("");
-        if(classId != ""){
-          const response = await attendence(classId, facenetUser.id);
+        if (classId !== "") {
+          const response = await attendence(classId, userData.id); // Dùng trực tiếp kết quả từ API
           console.log(response);
         }
       } else if (facenetResult.detail.code == 404) {
@@ -82,7 +83,13 @@ export default function Recognition() {
       <Box component="h1" style={{ marginBottom: "40px" }}>
         Điểm Danh
       </Box>
-      <Alert severity="warning" sx={{marginBottom: "20px  .\venv\Scripts\activate"}} >Lưu ý: Không nhắm mắt, che miệng, che mũi trong quá trình thêm người dùng</Alert>
+      <Alert
+        severity="warning"
+        sx={{ marginBottom: "20px  .\venvScriptsactivate" }}
+      >
+        Lưu ý: Không nhắm mắt, che miệng, che mũi trong quá trình thêm người
+        dùng
+      </Alert>
       <Webcam
         ref={webcamRef}
         style={{ marginBottom: "20px" }}
