@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UserCreationForm from "../component/UserCreationForm";
-import { Box } from "@mui/material";
+import { Alert, Box } from "@mui/material";
 export default function UserCreation() {
   return (
     <Box
@@ -12,7 +12,8 @@ export default function UserCreation() {
       }}
     >
       <Box component="h1">Thêm người dùng</Box>
-      <Box component="h3">Vui lòng chuyển khuôn mặt lần lượt theo hướng: Chính giữa, Trên, Dưới, Trái, Phải mỗi khi có thông báo trên màn hình</Box>
+      <Alert severity="warning" sx={{marginBottom: "20px"}} >Vui lòng chuyển khuôn mặt lần lượt theo hướng: Chính giữa, Trên, Dưới, Trái, Phải mỗi khi có thông báo trên màn hình</Alert>
+      <Alert severity="warning" >Lưu ý: Không nhắm mắt, che miệng, che mũi trong quá trình thêm người dùng</Alert>
       <UserCreationForm />
     </Box>
   );

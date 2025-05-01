@@ -1,9 +1,10 @@
-import { Alert, Box, Button } from "@mui/material";
+import { Alert, Box, Button, TextField } from "@mui/material";
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { uploadImage } from "../service/ImageService";
 import { recognizeByFacenet } from "../service/FacenetService";
 import { recognizeByArcface } from "../service/ArcFaceService";
+import { attendence } from "../service/AttendanceService";
 export default function Recognition() {
   const [arcfaceUser, setArcfaceUser] = useState({ id: "", name: "" });
   const [facenetUser, setFacenetUser] = useState({ id: "", name: "" });
@@ -11,6 +12,7 @@ export default function Recognition() {
   const [arcfaceError, setArcfaceError] = useState("");
   const [error, setError] = useState("");
   const webcamRef = useRef(null);
+  const [classId, setClassId] = useState("");
   const upload = async () => {
     try {
       const imageSrc = await webcamRef.current.getScreenshot();
@@ -41,6 +43,10 @@ export default function Recognition() {
           name: facenetResult.detail.data.name,
         });
         setError("");
+        if(classId != ""){
+          const response = await attendence(classId, facenetUser.id);
+          console.log(response);
+        }
       } else if (facenetResult.detail.code == 404) {
         setFacenetError("Người dùng chưa có trong hệ thống");
         setFacenetUser({ id: "", name: "" });
@@ -76,6 +82,7 @@ export default function Recognition() {
       <Box component="h1" style={{ marginBottom: "40px" }}>
         Điểm Danh
       </Box>
+      <Alert severity="warning" sx={{marginBottom: "20px  .\venv\Scripts\activate"}} >Lưu ý: Không nhắm mắt, che miệng, che mũi trong quá trình thêm người dùng</Alert>
       <Webcam
         ref={webcamRef}
         style={{ marginBottom: "20px" }}
@@ -107,6 +114,14 @@ export default function Recognition() {
           Arcface: {arcfaceUser.name}
         </Alert>
       )}
+      <TextField
+        id="username"
+        label="Mã lớp"
+        variant="outlined"
+        margin="normal"
+        onChange={(e) => setClassId(e.target.value)}
+        required
+      />
       <Button variant="contained" onClick={handleCapture}>
         Capture
       </Button>
